@@ -16,6 +16,7 @@ namespace Week4
             Debug.WriteLine("Program.Main");
             ApplicationConfiguration.Initialize();
             Application.Run(new Form1());
+            
         }
     }
 }

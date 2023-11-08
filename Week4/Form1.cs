@@ -7,6 +7,8 @@ namespace Week4
         public Form1()
         {
             InitializeComponent();
+            comboBox1.SelectedIndex = 0;
+            listBox1.Items.Clear();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -123,6 +125,174 @@ namespace Week4
         private void radioCustomEvent_CheckedChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnCity_Click(object sender, EventArgs e)
+        {
+            var newCity = txtNewCity.Text;
+            //comboBox1.Items.Add(newCity);
+            comboBox1.Items.Insert(0, newCity);
+            comboBox1.SelectedIndex = comboBox1.Items.Count - 1;
+        }
+
+        private void btnRemove_Click(object sender, EventArgs e)
+        {
+            var city = txtNewCity.Text;
+
+            if (comboBox1.Items.Contains(city))
+                comboBox1.Items.Remove(city);
+        }
+
+        private void btnCmbNext_Click(object sender, EventArgs e)
+        {
+            var id = comboBox1.SelectedIndex + 1;
+            comboBox1.SelectedIndex = id == comboBox1.Items.Count ? 0 : id;
+        }
+
+        private void btnCmbPrev_Click(object sender, EventArgs e)
+        {
+            var id = comboBox1.SelectedIndex - 1;
+            comboBox1.SelectedIndex = id < 0 ? comboBox1.Items.Count - 1 : id;
+        }
+
+        private void btnCmbShow_Click(object sender, EventArgs e)
+        {
+            var index = comboBox1.SelectedIndex;
+            var item = comboBox1.SelectedItem.ToString();
+
+            MessageBox.Show($"Index: {index}, Item: {item}");
+        }
+
+        private void btnAddListbox_Click(object sender, EventArgs e)
+        {
+            listBox1.Items.Clear();
+
+            foreach (var item in comboBox1.Items)
+            {
+                listBox1.Items.Add(item);
+            }
+
+        }
+
+        private void btnListReadFile_Click(object sender, EventArgs e)
+        {
+            listBox1.Items.Clear();
+            var file = new StreamReader(@"C:\Users\notmarul\source\repos\Week2\Week4\agalar.txt");
+            var line = "";
+
+            while ((line = file.ReadLine()) != null)
+                listBox1.Items.Add(line);
+
+            file.Close();
+        }
+
+        private void btnNewUser_Click(object sender, EventArgs e)
+        {
+            if (txtFullName.Text == " " || txtEmail.Text == " " || txtage.Text == " ")
+            {
+                MessageBox.Show("All fields are required", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            var newUser = txtFullName.Text + "," + txtEmail.Text + "," + txtage.Text;
+
+            listBox1.Items.Add(newUser);
+        }
+
+        private void btnSaveFile_Click(object sender, EventArgs e)
+        {
+            var file = new StreamWriter(@"C:\Users\notmarul\source\repos\Week2\Week4\users.txt");
+
+            foreach (var item in listBox1.Items)
+                file.WriteLine(item);
+
+            file.Close();
+        }
+
+        private void btnLoadFile_Click(object sender, EventArgs e)
+        {
+            listBox1.Items.Clear();
+            var file = new StreamReader(@"C:\Users\notmarul\source\repos\Week2\Week4\users.txt");
+            var line = "";
+
+            while ((line = file.ReadLine()) != null)
+            {
+                listBox1.Items.Add(line);
+            }
+
+            file.Close();
+
+        }
+
+        private void CheckBoxStatusControl(object sender, EventArgs e)
+        {
+
+            CheckBox senderCheckbox = (CheckBox)sender;
+
+            if (senderCheckbox.Checked)
+            {
+                listBox1.Items.Add(senderCheckbox.Text);
+            }
+
+            else
+            {
+                listBox1.Items.Remove(senderCheckbox.Text);
+            }
+        }
+
+        private void radioStretch_CheckedChanged(object sender, EventArgs e)
+        {
+            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+        }
+
+        private void radioZoom_CheckedChanged(object sender, EventArgs e)
+        {
+            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
+        }
+
+        private void trackBar1_Scroll(object sender, EventArgs e)
+        {
+            lblLevel.Text = "Level: " + trackBar1.Value.ToString();
+
+            pictureBox1.Size = new Size(trackBar1.Value * 100, trackBar1.Value * 100);
+        }
+
+        private void btnTree_Click(object sender, EventArgs e)
+        {
+            treeView1.Nodes.Clear();
+
+            var file = new StreamReader(@"C:\Users\notmarul\source\repos\Week2\Week4\agalar.txt");
+            var line = "";
+
+            treeView1.Nodes.Add("Agalar");
+
+            while ((line = file.ReadLine()) != null)
+            {
+                treeView1.Nodes[0].Nodes.Add(line);
+            }
+
+            file.Close();
+
+            file = new StreamReader(@"C:\Users\notmarul\source\repos\Week2\Week4\users.txt");
+            treeView1.Nodes.Add("Users");
+
+            while ((line = file.ReadLine()) != null)
+            {
+                treeView1.Nodes[1].Nodes.Add(line);
+            }
+
+            file.Close();
+        }
+
+        private void changeBackgroundColorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Random rnd = new Random();
+            this.BackColor = Color.FromArgb(rnd.Next(0, 255), rnd.Next(0, 255), rnd.Next(0, 255));
+        }
+
+        private void closeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }
