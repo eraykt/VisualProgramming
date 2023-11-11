@@ -1,6 +1,3 @@
-
-using System.Diagnostics;
-
 namespace Week5Lab
 {
     public partial class Form1 : Form
