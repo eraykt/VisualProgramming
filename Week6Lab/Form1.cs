@@ -79,11 +79,12 @@ namespace Week6Lab
 
             while ((line = file.ReadLine()) != null)
             {
+                var split = line.Split(',');
                 var p = new User(
-                   int.Parse(line.Split(',')[0]) - 1, // id
-                   line.Split(',')[1], // name
-                   line.Split(',')[2], // surname
-                   int.Parse(line.Split(',')[3]) // age
+                   int.Parse(split[0]) - 1, // id
+                   split[1], // name
+                   split[2], // surname
+                   int.Parse(split[3]) // age
                     );
 
                 users.Add(p.id, p);
