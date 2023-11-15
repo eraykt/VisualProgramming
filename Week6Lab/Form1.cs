@@ -1,28 +1,20 @@
-namespace Week6Lab
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Diagnostics;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace Lab6
 {
     public partial class Form1 : Form
     {
-        string email, firstName, lastName;
-
-        class User
-        {
-            public int id;
-            public string name, surname;
-            public int age;
-
-            public User(int id, string name, string surname, int age)
-            {
-                this.id = id;
-                this.name = name;
-                this.surname = surname;
-                this.age = age;
-            }
-
-            public string GetName() => $"{name} {surname}";
-            public override string ToString() => $"{id} {name} {surname} {age}";
-        }
-
-        Dictionary<int, User> users;
+        private Dictionary<int, User> users;
 
         public Form1()
         {
@@ -31,66 +23,66 @@ namespace Week6Lab
 
         private void btnSignIn_Click(object sender, EventArgs e)
         {
+            var email = textBoxEmail.Text;
+            var password = textBoxPassword.Text;
+
             var file = new StreamReader(@"C:\Users\notmarul\source\repos\Week2\Week6Lab\admins.txt");
             var line = "";
 
             while ((line = file.ReadLine()) != null)
             {
-                var email = line.Split(',')[0];
-                var password = line.Split(',')[1];
-
-                if (email == textBoxEmail.Text && password == textBoxPassword.Text)
+                var lines = line.Split(',');
+                if (email == lines[0] && password == lines[1])
                 {
-                    this.email = email;
-                    this.firstName = line.Split(',')[2];
-                    this.lastName = line.Split(',')[3];
-                    notifyIcon1.ShowBalloonTip(1000, "Login Notification", $"Welcome {firstName} {lastName}, you have sucessfully logged in !", ToolTipIcon.Info);
-                    MessageBox.Show("Welcome " + firstName + " " + lastName + "!");
-                    labelWelcome.Text = $"Welcome {firstName} {lastName} !";
+                    notifyIcon1.ShowBalloonTip(2000, "Giris Basarili",
+                        $"Sayin {lines[2]} {lines[3]}, basari ile giris yaptiniz!", ToolTipIcon.Info);
 
-                    groupboxUserList.Visible = true;
-                    groupboxSignIn.Visible = false;
-                    labelWelcome.Visible = true;
+                    MessageBox.Show($"Hosgeldin, {lines[2]} {lines[3]}!", "Giris Basarili!",
+                        MessageBoxButtons.OK);
 
-                    LoadValues();
+                    LoadUsers();
+                    groupBoxUsers.Visible = true;
+                    groupBoxSignIn.Visible = false;
 
+                    file.Close();
                     return;
                 }
             }
 
-            MessageBox.Show("Invalid email or password", "Login Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            textBoxEmail.Text = textBoxPassword.Text = "";
-
+            MessageBox.Show("Hatali giris!", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
             file.Close();
+            textBoxEmail.Text = "";
+            textBoxPassword.Text = "";
         }
 
         private void textBoxPassword_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter) btnSignIn_Click(sender, e);
+            if (e.KeyCode == Keys.Enter)
+                btnSignIn_Click(sender, e);
         }
 
-        private void LoadValues()
+        private void LoadUsers()
         {
             comboBoxUsers.Items.Clear();
 
             var file = new StreamReader(@"C:\Users\notmarul\source\repos\Week2\Week6Lab\users.txt");
             var line = "";
-            users = new();
+
+            users = new Dictionary<int, User>();
 
             while ((line = file.ReadLine()) != null)
             {
-                var split = line.Split(',');
-                var p = new User(
-                   int.Parse(split[0]) - 1, // id
-                   split[1], // name
-                   split[2], // surname
-                   int.Parse(split[3]) // age
-                    );
+                var lines = line.Split(',');
+                User u = new User(int.Parse(lines[0]),
+                    lines[1],
+                    lines[2],
+                   int.Parse(lines[3]));
 
-                users.Add(p.id, p);
-                comboBoxUsers.Items.Add(p.GetName());
+                users.Add(u.GetId() - 1, u);
+
+                comboBoxUsers.Items.Add(u.GetName());
             }
-
+            
             file.Close();
 
             comboBoxUsers.SelectedIndex = 0;
@@ -101,10 +93,29 @@ namespace Week6Lab
             listBoxUsers.Items.Clear();
             var user = users[comboBoxUsers.SelectedIndex];
 
-            listBoxUsers.Items.Add(user.id + 1);
-            listBoxUsers.Items.Add(user.name);
-            listBoxUsers.Items.Add(user.surname);
-            listBoxUsers.Items.Add(user.age);
+            listBoxUsers.Items.Add(user.GetId());
+            listBoxUsers.Items.Add(user.GetFirstName());
+            listBoxUsers.Items.Add(user.GetSurname());
+            listBoxUsers.Items.Add(user.GetAge());
+        }
+
+        private void btnAddUser_Click(object sender, EventArgs e)
+        {
+            FormSignUp signUpForm = new FormSignUp(this);
+            signUpForm.Show();
+        }
+
+        public void SetANewUser(User u)
+        {
+            u.SetId(users.Count + 1);
+            users.Add(u.GetId() - 1, u);
+
+            var file = new StreamWriter(@"C:\Users\notmarul\source\repos\Week2\Week6Lab\users.txt", true);
+            file.WriteLine($"{ u.GetId()},{u.GetFirstName()},{u.GetSurname()},{u.GetAge()}");
+            file.Close();
+
+            LoadUsers();
+
         }
     }
 }
