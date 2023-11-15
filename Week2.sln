@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Week4Lab", "Week4Lab\Week4L
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Week5Lab", "Week5Lab\Week5Lab.csproj", "{F51D88AA-0F67-4A56-A00D-ACF19C4415E3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lab6", "Week6Lab\Lab6.csproj", "{B7922526-E084-425D-A01F-BAD70015CA29}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Weeb6Lab", "Week6Lab\Weeb6Lab.csproj", "{B7922526-E084-425D-A01F-BAD70015CA29}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
