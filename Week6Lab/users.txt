@@ -10,3 +10,4 @@
 10,semo,asd,3
 11,apo,boyar,3
 12,asdsad,sdsa,18
+13,furkan,sabaz,42

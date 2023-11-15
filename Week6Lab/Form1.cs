@@ -15,10 +15,12 @@ namespace Lab6
     public partial class Form1 : Form
     {
         private Dictionary<int, User> users;
+        public static Form1 Instance;
 
         public Form1()
         {
             InitializeComponent();
+            Instance = this;
         }
 
         private void btnSignIn_Click(object sender, EventArgs e)

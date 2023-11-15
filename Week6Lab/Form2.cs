@@ -38,7 +38,8 @@ namespace Lab6
 
             var user = new User(-1, name, surname, age);
 
-            form1.SetANewUser(user);
+            //form1.SetANewUser(user);
+            Form1.Instance.SetANewUser(user);
             MessageBox.Show("New user created successfully!");
             Close();
         }
